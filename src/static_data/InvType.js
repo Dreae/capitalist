@@ -13,6 +13,6 @@ export default class InvType {
     }
 
     getIcon() {
-        return getTypeIcon(this.typeID);
+        return getTypeIcon(this.id);
     }
 }

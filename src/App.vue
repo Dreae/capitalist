@@ -1,5 +1,7 @@
 <template>
-    <MarketBrowser :staticData="staticData" />
+    <div class="container-fluid">
+        <MarketBrowser :staticData="staticData" />
+    </div>
 </template>
 
 <script>
