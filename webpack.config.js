@@ -11,9 +11,9 @@ module.exports = {
         path: path.resolve(__dirname, 'build'),
         filename: 'bundle.js',
     },
-    externals: [
-      'sqlite3'
-    ],
+    externals: {
+      'sqlite3': 'commonjs sqlite3'
+    },
     resolve: {
         extensions: [".js", ".vue"],
         alias: {
@@ -40,5 +40,5 @@ module.exports = {
         ] },
         { test: /\.ttf|\.woff|\.woff2|\.eot|\.svg$/, use: "file" }
       ]
-    }  
+    }
 };
