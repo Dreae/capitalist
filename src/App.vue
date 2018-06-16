@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid app">
         <MarketBrowser :staticData="staticData" />
     </div>
 </template>
@@ -19,3 +19,8 @@ export default {
 }
 </script>
 
+<style>
+.app {
+    padding: 24px;
+}
+</style>

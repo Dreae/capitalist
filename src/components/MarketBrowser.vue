@@ -1,6 +1,6 @@
 <template>
     <div class="columns">
-        <div class="column is-one-third">
+        <div class="column is-one-quarter card">
             <aside class="menu">
                 <p class="menu-label">
                     The Forge Market
@@ -10,24 +10,9 @@
                 </ul>
             </aside>
         </div>
-        <div class="column">
+        <div class="column card">
             <template v-if="shownTypes">
-                <article class="media" v-for="type in shownTypes" :key="type.id">
-                    <figure class="media-left">
-                        <p class="image is-64x64">
-                            <img :src="type.getIcon()">
-                        </p>
-                    </figure>
-                    <div class="media-content">
-                        <div class="content">
-                            <p>
-                                <strong>{{ type.name }}</strong>
-                                <br>
-                                {{ type.desc }}
-                            </p>
-                        </div>
-                    </div>
-                </article>
+                <MarketTypeSummary :type="type" v-for="type in shownTypes" :key="type.id" />
             </template>
         </div>
     </div>
@@ -36,6 +21,7 @@
 <script>
 import Vue from 'vue';
 import MarketGroup from './MarketGroup';
+import MarketTypeSummary from './MarketTypeSummary';
 
 export default {
     name: "MarketBrowser",
@@ -56,7 +42,7 @@ export default {
             this.shownTypes = types;
         }
     },
-    components: { MarketGroup }
+    components: { MarketGroup, MarketTypeSummary }
 }
 </script>
 

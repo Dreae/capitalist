@@ -23,12 +23,14 @@ export default {
     methods: {
         loadGroup: function() {
             this.expanded = !this.expanded;
+
+
             if (!this.loaded) {
                 const onLoaded = (children) => {
                     this.children = children;
                     this.loaded = true;
 
-                    if (this.group.hasTypes) {
+                    if (this.expanded && this.group.hasTypes) {
                         this.$emit('showTypes', this.children);
                     }
                 }
@@ -37,6 +39,8 @@ export default {
                 } else if(this.group.hasTypes) {
                     this.staticData.getMarketGroupTypes(this.group.id).then(onLoaded);
                 }
+            } else if (this.expanded && this.group.hasTypes) {
+                this.$emit('showTypes', this.children);
             }
         },
         showTypes: function(types) {
