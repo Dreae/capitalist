@@ -6,5 +6,6 @@ export default class MarketGroup {
         this.desc = row.description;
         this.hasTypes = row.hasTypes;
         this.hasChildren = row.hasChildren;
+        this.isGroup = true;
     }
 }

@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <Navbar />
         <div class="container-fluid app">
-            <div class="tabs">
+            <div class="tabs is-centered">
                 <ul>
                     <li><a>Character</a></li>
                     <li><a>Statistics</a></li>
@@ -22,7 +22,7 @@
 
 <script>
 import MarketBrowser from "./components/MarketBrowser";
-import StaticData from "./static_data";
+import SDE from "./static_data";
 import Navbar from './components/Navbar';
 
 export default {
@@ -30,7 +30,7 @@ export default {
     components: { MarketBrowser, Navbar },
     data: function() {
         return {
-            staticData: new StaticData()
+            staticData: SDE
         };
     }
 }

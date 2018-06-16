@@ -2,7 +2,7 @@
     <li>
         <a @click="loadGroup()">{{ group.name }}</a>
         <ul v-if="this.expanded && this.loaded">
-            <MarketGroup @showTypes="showTypes" :group="subGroup" :staticData="staticData" v-for="subGroup in children" :key="subGroup.id" />
+            <MarketGroup @showTypes="showTypes" @showType="showType" :group="subGroup" :staticData="staticData" v-for="subGroup in children" :key="subGroup.id" />
         </ul>
     </li>
 </template>
@@ -22,6 +22,11 @@ export default {
     },
     methods: {
         loadGroup: function() {
+            if (this.group.isType) {
+                this.$emit('showType', this.group.id);
+                return;
+            }
+
             this.expanded = !this.expanded;
 
 
@@ -45,6 +50,9 @@ export default {
         },
         showTypes: function(types) {
             this.$emit('showTypes', types);
+        },
+        showType: function(typeId) {
+            this.$emit('showType', typeId);
         }
     }
 }

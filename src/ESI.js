@@ -6,6 +6,7 @@ export class ESIClient {
             baseURL: 'https://esi.evetech.net/latest/',
             timeout: 3000
         });
+        this.authorized = false;
     }
 
     getRegionTypeMarketHistory(regionId, typeId) {
@@ -16,6 +17,30 @@ export class ESIClient {
 
             return [];
         });
+    }
+
+    getRegionTypeMarketOrders(regionId, typeId) {
+        return this.axios.get(`markets/${regionId}/orders?type_id=${typeId}`).then((response) => {
+            if (response.status === 200) {
+                return response.data;
+            }
+
+            return [];
+        })
+    }
+
+    getStructureById(structureId) {
+        if (!this.authorized) {
+            return Promise.resolve(undefined);
+        } else {
+            return this.axios.get(`universe/structures/${structureId}/`).then((response) => {
+                if (response.status === 200) {
+                    return response.data;
+                }
+
+                return undefined;
+            });
+        }
     }
 }
 

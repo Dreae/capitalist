@@ -1,6 +1,7 @@
 import * as sqlite from 'sqlite3';
 import InvType from './InvType';
 import MarketGroup from './MarketGroup';
+import Station from './Station';
 
 export default class StaticData {
     constructor() {
@@ -59,6 +60,22 @@ export default class StaticData {
                 } else {
                     resolve(rows.map(row => new InvType(row)));
                 }
+            });
+        });
+    }
+
+    getStationById(stationId) {
+        return new Promise((resolve, reject) => {
+            this.db.get('SELECT * FROM staStations WHERE stationID = ?', stationId, (err, row) => {
+                if (err) {
+                    reject(err);
+                }
+
+                if (row) {
+                    resolve(new Station(row));
+                }
+
+                resolve(undefined);
             });
         });
     }

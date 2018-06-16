@@ -1,21 +1,23 @@
 <template>
-    <article class="media">
-        <figure class="media-left">
-            <p class="image is-64x64">
-                <img :src="type.getIcon()">
-            </p>
-        </figure>
-        <div class="media-content">
-            <div class="content">
-                <p>
-                    <strong>{{ type.name }}</strong>
-                    <Sparkline :data="priceHistory" />
-                    <br>
-                    {{ type.desc }}
+    <div class="box" @click="$emit('showType')">
+        <article class="media">
+            <figure class="media-left">
+                <p class="image is-64x64">
+                    <img :src="type.getIcon()">
                 </p>
+            </figure>
+            <div class="media-content">
+                <div class="content">
+                    <p>
+                        <strong>{{ type.name }}</strong>
+                        <Sparkline :data="priceHistory" />
+                        <br>
+                        <span v-html="type.desc"></span>
+                    </p>
+                </div>
             </div>
-        </div>
-    </article>
+        </article>
+    </div>
 </template>
 
 <script>
@@ -41,3 +43,13 @@ export default {
     }
 }
 </script>
+
+<style>
+.box {
+    cursor: pointer;
+}
+
+font[color="yellow"] {
+    color: hsl(48, 100%, 67%);
+}
+</style>

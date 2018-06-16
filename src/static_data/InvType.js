@@ -10,6 +10,7 @@ export default class InvType {
         this.faction = row.faction === 1;
         this.deadspace = row.deadspace === 1;
         this.officer = row.officer === 1;
+        this.isType = true;
     }
 
     getIcon() {
