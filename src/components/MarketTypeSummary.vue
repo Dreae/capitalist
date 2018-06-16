@@ -23,6 +23,8 @@ import { Chart } from 'chart.js';
 import Sparkline from './charts/Sparkline';
 import ESI from '../ESI';
 
+import { normalizeMarketHistoryByWeek } from '../DateUtil';
+
 export default {
     name: "MarketTypeSummary",
     props: ["type"],
@@ -34,7 +36,7 @@ export default {
     },
     created: function() {
       ESI.getRegionTypeMarketHistory(10000002, this.type.id).then((data) => {
-        this.priceHistory.push(...data.slice(-30).map((point) => point.average));
+        this.priceHistory.push(...normalizeMarketHistoryByWeek(data).map(p => p.average));
       });
     }
 }

@@ -2,7 +2,20 @@
     <div class="container-fluid">
         <Navbar />
         <div class="container-fluid app">
-            <MarketBrowser :staticData="staticData" />
+            <div class="tabs">
+                <ul>
+                    <li><a>Character</a></li>
+                    <li><a>Statistics</a></li>
+                    <li><a>Assets</a></li>
+                    <li><a>Orders</a></li>
+                    <li><a>Journal</a></li>
+                    <li><a>Transactions</a></li>
+                    <li class="is-active"><a>Market Browser</a></li>
+                </ul>
+            </div>
+            <div class="active-tab">
+                <MarketBrowser :staticData="staticData" />
+            </div>
         </div>
     </div>
 </template>
@@ -25,6 +38,10 @@ export default {
 
 <style>
 .app {
-    padding: 24px;
+    margin-top: 52px;
+}
+.active-tab {
+    padding-left: 24px;
+    padding-right: 24px;
 }
 </style>

@@ -25,7 +25,8 @@ export default {
             labels: [...this.data.keys()],
             datasets: [
               {
-                data: this.data
+                data: this.data,
+                spanGaps: true
               }
             ]
           },
