@@ -38,7 +38,7 @@ module.exports = {
           { loader: 'style-loader' },
           { loader: 'css-loader' }
         ] },
-        { test: /\.ttf|\.woff|\.woff2|\.eot|\.svg$/, use: "file" }
+        { test: /\.ttf|\.woff|\.woff2|\.eot|\.svg$/, use: "file-loader" }
       ]
     }
 };

@@ -7,20 +7,25 @@
             </ul>
         </div>
         <div v-if="activeTab === 0" class="active-tab">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Station</th>
-                        <th>Price</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="order in orders.sell" :key="order.id">
-                        <td>{{ order.station }}</td>
-                        <td>{{ order.price }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <Table
+                :columns='[
+                    {
+                        name: "Station",
+                        key: "station"
+                    },
+                    {
+                        name: "Price",
+                        key: "price",
+                        formatter: "isk"
+                    },
+                    {
+                        name: "Volume",
+                        key: "volumeRemaining",
+                        formatter: "integer"
+                    }
+                ]'
+                :rows="orders.sell"
+            />
         </div>
         <div v-else class="active-tab">
 
@@ -31,6 +36,7 @@
 <script>
 import ESI from '../ESI';
 import { getLocationNameForId } from '../Util';
+import Table from './Table';
 
 export default {
     name: "MarketTypeDetail",
@@ -70,6 +76,7 @@ export default {
                 }
             })
         });
-    }
+    },
+    components: { Table }
 }
 </script>
