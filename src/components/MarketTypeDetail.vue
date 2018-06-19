@@ -2,33 +2,66 @@
     <div class="market-details">
         <div class="tabs">
             <ul>
-                <li class="is-active"><a>Orders</a></li>
-                <li><a>Price History</a></li>
+                <li :class="{'is-active': activeTab === 1}" @click="activeTab = 1"><a>Orders</a></li>
+                <li :class="{'is-active': activeTab === 2}" @click="activeTab = 2"><a>Price History</a></li>
             </ul>
         </div>
-        <div v-if="activeTab === 0" class="active-tab">
-            <Table
-                :columns='[
-                    {
-                        name: "Station",
-                        key: "station"
-                    },
-                    {
-                        name: "Price",
-                        key: "price",
-                        formatter: "isk"
-                    },
-                    {
-                        name: "Volume",
-                        key: "volumeRemaining",
-                        formatter: "integer"
-                    }
-                ]'
-                :rows="orders.sell"
-            />
+        <div v-if="activeTab === 1" class="active-tab">
+            <div class="content">
+                <h4>Sell Orders</h4>
+                <Table
+                    :columns='[
+                        {
+                            name: "Station",
+                            key: "station"
+                        },
+                        {
+                            name: "Price",
+                            key: "price",
+                            formatter: "isk"
+                        },
+                        {
+                            name: "Volume",
+                            key: "volumeRemaining",
+                            formatter: "integer"
+                        }
+                    ]'
+                    :rows="orders.sell"
+                />
+                <h4>Buy Orders</h4>
+                <Table
+                    :columns='[
+                        {
+                            name: "Station",
+                            key: "station"
+                        },
+                        {
+                            name: "Price",
+                            key: "price",
+                            formatter: "isk"
+                        },
+                        {
+                            name: "Volume",
+                            key: "volumeRemaining",
+                            formatter: "integer"
+                        }
+                    ]'
+                    :rows="orders.buy"
+                />
+            </div>
         </div>
         <div v-else class="active-tab">
-
+            <LineAreaBarComboChart 
+                :lineData="{
+                    label: 'Price', 
+                    data: priceHistoryWindowed.map((p) => p.average)
+                }"
+                :barData="{
+                    label: 'Volume',
+                    data: priceHistoryWindowed.map((p) => p.volume)
+                }"
+                :labels="priceHistoryWindowed.map((p) => p.date)"
+            />
         </div>
     </div>
 </template>
@@ -37,6 +70,9 @@
 import ESI from '../ESI';
 import { getLocationNameForId } from '../Util';
 import Table from './Table';
+import LineAreaBarComboChart from './charts/LineAreaBarComboChart';
+
+import { normalizeMarketHistoryByWeek } from '../DateUtil';
 
 export default {
     name: "MarketTypeDetail",
@@ -44,11 +80,12 @@ export default {
     data: function() {
         return {
             priceHistory: [],
+            priceHistoryWindowed: [],
             orders: {
                 buy: [],
                 sell: []
             },
-            activeTab: 0
+            activeTab: 1
         };
     },
     created: function() {
@@ -74,9 +111,14 @@ export default {
                 } else {
                     this.orders.sell.push(newOrder);
                 }
-            })
+            });
+        });
+
+        ESI.getRegionTypeMarketHistory(10000002, this.typeId).then((data) => {
+            this.priceHistory.push(...data);
+            this.priceHistoryWindowed.push(...normalizeMarketHistoryByWeek(this.priceHistory));
         });
     },
-    components: { Table }
+    components: { Table, LineAreaBarComboChart }
 }
 </script>

@@ -79,3 +79,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.table {
+    min-width: 100%;
+}
+</style>

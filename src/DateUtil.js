@@ -16,12 +16,14 @@ export function normalizeMarketHistoryByWeek(data, start = null, end = null) {
     while (!current_week.isSameOrBefore(end_week, 'week')) {
         let num_counted = 0;
         let week = 0;
+        let volume = 0;
 
         for (let element of data) {
             if (current_week.isSame(element.date, 'week')) {
                 num_counted++;
                 week = (week * (num_counted - 1)) + element.average;
                 week = week / num_counted;
+                volume = volume + element.volume;
 
                 continue;
             }
@@ -31,9 +33,10 @@ export function normalizeMarketHistoryByWeek(data, start = null, end = null) {
             week = NaN;
         }
 
-        weeks.push({average: week, date: current_week.format('YYYY-MM-DD')});
+        weeks.push({average: week, volume, date: current_week.format('YYYY-MM-DD')});
 
         week = 0;
+        volume = 0;
         num_counted = 0;
         current_week.subtract(1, 'week');
     }

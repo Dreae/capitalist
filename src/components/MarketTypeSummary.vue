@@ -8,12 +8,17 @@
             </figure>
             <div class="media-content">
                 <div class="content">
-                    <p>
-                        <strong>{{ type.name }}</strong>
-                        <Sparkline :data="priceHistory" />
-                        <br>
+                        <div class="level">
+                            <div class="level-left">
+                                <div class="level-item">
+                                    <strong>{{ type.name }}</strong>
+                                </div>
+                                <div class="level-item">
+                                    <Sparkline class="sparkline" :data="priceHistory" />
+                                </div>
+                            </div>
+                        </div>
                         <span v-html="type.desc"></span>
-                    </p>
                 </div>
             </div>
         </article>
@@ -51,5 +56,9 @@ export default {
 
 font[color="yellow"] {
     color: hsl(48, 100%, 67%);
+}
+
+.sparkline {
+    margin-left: 12px;
 }
 </style>

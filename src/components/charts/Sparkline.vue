@@ -1,6 +1,6 @@
 <template>
     <div class="sparkline">
-        <canvas :id="id" />
+        <canvas :id="id" height="20" width="80"/>
     </div>
 </template>
 
@@ -37,7 +37,7 @@ export default {
             },
             elements: {
               line: {
-                borderColor: '#000000',
+                borderColor: '#888888',
                 borderWidth: 1,
                 fill: false
               },
@@ -74,7 +74,8 @@ export default {
 
 <style>
 .sparkline {
-    width: 96px;
-    height: 32px;
+    width: 80px;
+    height: 20px;
+    display: inline-block;
 }
 </style>
