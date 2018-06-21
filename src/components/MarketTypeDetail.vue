@@ -41,6 +41,10 @@
                             formatter: "isk"
                         },
                         {
+                            name: "Range",
+                            key: "range"
+                        },
+                        {
                             name: "Volume",
                             key: "volumeRemaining",
                             formatter: "integer"
@@ -68,11 +72,11 @@
 
 <script>
 import ESI from '../ESI';
-import { getLocationNameForId } from '../Util';
+import { getLocationNameForId, formatOrderRange } from '../Util';
 import Table from './Table';
 import LineAreaBarComboChart from './charts/LineAreaBarComboChart';
 
-import { normalizeMarketHistoryByWeek } from '../DateUtil';
+import { normalizeMarketHistoryByWeek, windowPriceHistory } from '../MarketUtil';
 
 export default {
     name: "MarketTypeDetail",
@@ -98,7 +102,7 @@ export default {
                     price: order.price,
                     issued: order.issued,
                     duration: order.duration,
-                    range: order.range,
+                    range: formatOrderRange(order.range),
                     id: order.order_id
                 };
 
@@ -116,7 +120,7 @@ export default {
 
         ESI.getRegionTypeMarketHistory(10000002, this.typeId).then((data) => {
             this.priceHistory.push(...data);
-            this.priceHistoryWindowed.push(...normalizeMarketHistoryByWeek(this.priceHistory));
+            this.priceHistoryWindowed.push(...windowPriceHistory(this.priceHistory));
         });
     },
     components: { Table, LineAreaBarComboChart }

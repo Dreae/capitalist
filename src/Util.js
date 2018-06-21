@@ -20,3 +20,18 @@ export function getLocationNameForId(locationId) {
         });
     }
 }
+
+export function formatOrderRange(range) {
+    const jumps = parseInt(range);
+    if (isNaN(jumps)) {
+        if (range === 'region') {
+            return 'Region';
+        } else if (range === 'solarsystem') {
+            return 'Solar System';
+        } else {
+            return 'Station';
+        }
+    } else {
+        return `${jumps} Jumps`;
+    }
+}

@@ -30,7 +30,7 @@ import { Chart } from 'chart.js';
 import Sparkline from './charts/Sparkline';
 import ESI from '../ESI';
 
-import { normalizeMarketHistoryByWeek } from '../DateUtil';
+import { normalizeMarketHistoryByWeek } from '../MarketUtil';
 
 export default {
     name: "MarketTypeSummary",

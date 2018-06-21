@@ -31,7 +31,8 @@ export default {
                     label: this.lineData.label,
                     data: this.lineData.data,
                     type: 'line',
-                    backgroundColor: '#00d1b2',
+                    backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                    borderColor: '#00d1b2',
                     yAxisID: 'lineChart'
                 }],
                 labels: this.labels,
@@ -44,14 +45,21 @@ export default {
                         type: 'linear',
                         display: false,
                         ticks: {
-                            max: Math.max(...this.barData.data) * 2.5
+                            max: Math.max(...this.barData.data) * 4
                         }
                     }, {
                         id: 'lineChart',
                         type: 'linear',
                         offset: false,
-                        position: 'left'
+                        position: 'left',
+                        ticks: {
+                            min: 0
+                        }
                     }]
+                },
+                tooltips: {
+                    intersect: false,
+                    mode: 'nearest'
                 }
             }
         });
