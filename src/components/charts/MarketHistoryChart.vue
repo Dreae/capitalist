@@ -1,18 +1,53 @@
 <template>
-    <div class="line-area-bar-combo" :id="id"></div>
+    <div class="market-history-chart" :id="id"></div>
 </template>
 
 <script>
 import * as Highcharts from 'highcharts/highstock';
 import * as uuid from 'uuid/v4';
+import * as moment from 'moment';
+
+import * as indicators from 'highcharts/indicators/indicators';
+import * as more from 'highcharts/highcharts-more';
+indicators(Highcharts);
+more(Highcharts);
+
+import { calculateDonchianMax, calculateDonchianMin } from '../../Util';
+
+function priceHistoryToMarketData(priceHistory) {
+    const price = [];
+    const donchianChannel = [];
+    const volume = [];
+    const candlestick = [];
+
+    const donchianLows = calculateDonchianMin(priceHistory.map(p => p.lowest));
+    const donchianHighs = calculateDonchianMax(priceHistory.map(p => p.highest));
+
+    priceHistory.forEach((p, index) => {
+        const date = moment(p.date).valueOf();
+        price.push([date, p.average]);
+        candlestick.push([date, p.highest, p.highest, p.lowest, p.lowest]);
+        volume.push([date, p.volume]);
+
+        donchianChannel.push([date, donchianLows[index], donchianHighs[index]]);
+    });
+
+    return {
+        price,
+        volume,
+        donchianChannel,
+        candlestick
+    };
+}
 
 export default {
     name: "MarketHistoryChart",
-    props: ["lineData", "barData", "labels"],
+    props: ["data"],
     data: function() {
         return {
             id: uuid(),
             chart: null,
+            chartData: priceHistoryToMarketData(this.data)
         }
     },
     mounted: function() {
@@ -60,15 +95,56 @@ export default {
                 type: 'line',
                 name: 'Price',
                 id: 'price',
-                data: this.lineData
+                data: this.chartData.price,
+                zIndex: 1
             }, {
                 type: 'column',
                 name: 'Volume',
                 yAxis: 1,
-                data: this.barData
+                data: this.chartData.volume
+            }, {
+                name: 'Moving Avg (5d)',
+                type: 'sma',
+                linkedTo: 'price',
+                params: {
+                    period: 5
+                },
+                marker: {
+                    enabled: false
+                },
+                zIndex: 100
+            }, {
+                name: 'Moving Avg (20d)',
+                type: 'sma',
+                linkedTo: 'price',
+                params: {
+                    period: 20
+                },
+                marker: {
+                    enabled: false
+                },
+                zIndex: 2
+            }, {
+                name: 'Donchian Channel',
+                type: 'arearange',
+                linkedTo: 'price',
+                data: this.chartData.donchianChannel,
+                zIndex: 0
+            }, {
+                name: 'Min/Max',
+                type: 'ohlc',
+                data: this.chartData.candlestick,
+                tooltip: {
+                    pointFormat: '<span style="color:{point.color}">●</span> <b> {series.name}</b><br/>Min: {point.low}<br/>Max: {point.high}<br/>'
+                }
             }]
         });
     }
 }
 </script>
 
+<style>
+.market-history-chart {
+    height: 480px;
+}
+</style>

@@ -43,19 +43,3 @@ export function normalizeMarketHistoryByWeek(data, start = null, end = null) {
 
     return weeks.reverse();
 }
-
-export function windowPriceHistory(data, start = null, end = null) {
-    let start_date = moment(start);
-    if (start === null) {
-        start_date = moment();
-    }
-
-    let end_date = moment(end);
-    if (end === null) {
-        end_date = moment(start_date).subtract(6, 'week');
-    }
-
-    return data.filter((point) => {
-        return moment(point.date).isBetween(end_date, start_date, null, '[]');
-    });
-}

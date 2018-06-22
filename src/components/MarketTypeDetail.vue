@@ -55,10 +55,7 @@
             </div>
         </div>
         <div v-else class="active-tab">
-            <MarketHistoryChart 
-                :lineData="priceHistory.map((p) => [p.date, p.average])"
-                :barData="priceHistory.map((p) => [p.date, p.volume])"
-            />
+            <MarketHistoryChart :data="priceHistory" />
         </div>
     </div>
 </template>
@@ -68,10 +65,6 @@ import ESI from '../ESI';
 import { getLocationNameForId, formatOrderRange } from '../Util';
 import Table from './Table';
 import MarketHistoryChart from './charts/MarketHistoryChart';
-
-import { normalizeMarketHistoryByWeek, windowPriceHistory } from '../MarketUtil';
-
-import * as moment from 'moment';
 
 export default {
     name: "MarketTypeDetail",
@@ -114,11 +107,7 @@ export default {
         });
 
         ESI.getRegionTypeMarketHistory(10000002, this.typeId).then((data) => {
-            this.priceHistory.push(...data.map((p) => {
-                p.date = moment(p.date).valueOf();
-
-                return p;
-            }));
+            this.priceHistory.push(...data);
         });
     },
     components: { Table, MarketHistoryChart }
