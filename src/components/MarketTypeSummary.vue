@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import { Chart } from 'chart.js';
 import Sparkline from './charts/Sparkline';
 import ESI from '../ESI';
 

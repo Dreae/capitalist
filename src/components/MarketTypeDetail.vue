@@ -55,16 +55,9 @@
             </div>
         </div>
         <div v-else class="active-tab">
-            <LineAreaBarComboChart 
-                :lineData="{
-                    label: 'Price', 
-                    data: priceHistoryWindowed.map((p) => p.average)
-                }"
-                :barData="{
-                    label: 'Volume',
-                    data: priceHistoryWindowed.map((p) => p.volume)
-                }"
-                :labels="priceHistoryWindowed.map((p) => p.date)"
+            <MarketHistoryChart 
+                :lineData="priceHistory.map((p) => [p.date, p.average])"
+                :barData="priceHistory.map((p) => [p.date, p.volume])"
             />
         </div>
     </div>
@@ -74,9 +67,11 @@
 import ESI from '../ESI';
 import { getLocationNameForId, formatOrderRange } from '../Util';
 import Table from './Table';
-import LineAreaBarComboChart from './charts/LineAreaBarComboChart';
+import MarketHistoryChart from './charts/MarketHistoryChart';
 
 import { normalizeMarketHistoryByWeek, windowPriceHistory } from '../MarketUtil';
+
+import * as moment from 'moment';
 
 export default {
     name: "MarketTypeDetail",
@@ -119,10 +114,13 @@ export default {
         });
 
         ESI.getRegionTypeMarketHistory(10000002, this.typeId).then((data) => {
-            this.priceHistory.push(...data);
-            this.priceHistoryWindowed.push(...windowPriceHistory(this.priceHistory));
+            this.priceHistory.push(...data.map((p) => {
+                p.date = moment(p.date).valueOf();
+
+                return p;
+            }));
         });
     },
-    components: { Table, LineAreaBarComboChart }
+    components: { Table, MarketHistoryChart }
 }
 </script>

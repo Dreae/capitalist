@@ -1,11 +1,9 @@
 <template>
-    <div class="sparkline">
-        <canvas :id="id" height="20" width="80"/>
-    </div>
+    <div class="sparkline" :id="id"></div>
 </template>
 
 <script>
-import { Chart } from 'chart.js';
+import * as Highcharts from 'highcharts/highstock';
 import * as uuid from 'uuid/v4';
 
 export default {
@@ -18,55 +16,90 @@ export default {
         }
     },
     mounted: function() {
-        const ctx = document.getElementById(this.id).getContext('2d');
-        this.chart = new Chart(ctx, {
+      this.chart = Highcharts.chart(this.id, {
+        chart: {
+          animation: false,
+          backgroundColor: null,
+          borderWidth: 0,
           type: 'line',
-          data: {
-            labels: [...this.data.keys()],
-            datasets: [
-              {
-                data: this.data,
-                spanGaps: true
-              }
-            ]
+          margin: [2, 0, 2, 0],
+          width: 80,
+          height: 20,
+          style: {
+            overflow: 'visible'
           },
-          options: {
-            responsive: true,
-            legend: {
-              display: false
-            },
-            elements: {
-              line: {
-                borderColor: '#888888',
-                borderWidth: 1,
-                fill: false
-              },
-              point: {
-                radius: 0
+          skipClone: true
+        },
+        title: {
+          text: ''
+        },
+        credits: {
+          enabled: false
+        },
+        xAxis: {
+          endOnTick: false,
+          startOnTick: false,
+          labels: {
+            enabled: false
+          },
+          title: {
+            text: null
+          },
+          lineWidth: 0,
+          tickPositions: []
+        },
+        yAxis: {
+          endOnTick: false,
+          startOnTick: false,
+          labels: {
+            enabled: false,
+          },
+          title: {
+            text: null
+          },
+          tickPositions: [0]
+        },
+        legend: {
+          enabled: false
+        },
+        tooltip: {
+          enabled: false
+        },
+        plotOptions: {
+          series: {
+            animation: false,
+            lineWidth: 1,
+            shadow: false,
+            states: {
+              hover: {
+                lineWidth: 1
               }
             },
-            tooltips: {
-              enabled: false
+            marker: {
+              radius: 0,
+              states: {
+                hover: {
+                  radius: 0
+                }
+              }
             },
-            scales: {
-              yAxes: [
-                {
-                  display: false
-                }
-              ],
-              xAxes: [
-                {
-                  display: false
-                }
-              ]
-            }
           }
-        });
+        },
+        series: [{
+          data: this.data,
+          color: '#949494'
+        }]
+      });
     },
     watch: {
         data: function() {
-            this.chart.data.labels = [...this.data.keys()];
-            this.chart.update();
+          this.chart.series[0].remove(false);
+          this.chart.addSeries({
+            data: this.data,
+            color: '#949494'
+          });
+          
+          this.chart.redraw();
         }
     }
 }
