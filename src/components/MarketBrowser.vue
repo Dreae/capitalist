@@ -41,9 +41,9 @@ export default {
         this.staticData.getTopLevelMarketGroups().then((groups) => {
             this.topGroups.push(...groups.sort((a, b) => {
                 if (a.name > b.name) {
-                    return -1;
-                } else {
                     return 1;
+                } else {
+                    return -1;
                 }
             }));
         });
@@ -56,6 +56,7 @@ export default {
             }
         },
         showType: function(typeId) {
+            console.log(typeId);
             this.shownType = typeId;
         }
     },

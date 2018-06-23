@@ -8,8 +8,10 @@ import * as uuid from 'uuid/v4';
 import * as moment from 'moment';
 
 import * as indicators from 'highcharts/indicators/indicators';
+import * as rsi from 'highcharts/indicators/rsi';
 import * as more from 'highcharts/highcharts-more';
 indicators(Highcharts);
+rsi(Highcharts);
 more(Highcharts);
 
 import { calculateDonchianMax, calculateDonchianMin } from '../../Util';
@@ -137,8 +139,17 @@ export default {
                 tooltip: {
                     pointFormat: '<span style="color:{point.color}">●</span> <b> {series.name}</b><br/>Min: {point.low}<br/>Max: {point.high}<br/>'
                 }
+            }, {
+                type: 'rsi',
+                linkedTo: 'price'
             }]
         });
+    },
+    watch: {
+        data: function() {
+            this.chartData = priceHistoryToMarketData(this.data);
+            this.chart.redraw();
+        }
     }
 }
 </script>

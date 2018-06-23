@@ -81,34 +81,46 @@ export default {
         };
     },
     created: function() {
-        ESI.getRegionTypeMarketOrders(10000002, this.typeId).then((data) => {
-            data.forEach((order) => {
-                const newOrder = {
-                    station: order.location_id,
-                    volumeRemaining: order.volume_remain,
-                    volume: order.volume_total,
-                    price: order.price,
-                    issued: order.issued,
-                    duration: order.duration,
-                    range: formatOrderRange(order.range),
-                    id: order.order_id
-                };
+        this.loadTypeData();
+    },
+    watch: {
+        typeId: function() {
+            this.loadTypeData();
+        }
+    },
+    methods: {
+        loadTypeData: function() {
+            ESI.getRegionTypeMarketOrders(10000002, this.typeId).then((data) => {
+                Object.assign(this.$data, this.$options.data());
 
-                getLocationNameForId(order.location_id).then((name) => {
-                    newOrder.station = name;
+                data.forEach((order) => {
+                    const newOrder = {
+                        station: order.location_id,
+                        volumeRemaining: order.volume_remain,
+                        volume: order.volume_total,
+                        price: order.price,
+                        issued: order.issued,
+                        duration: order.duration,
+                        range: formatOrderRange(order.range),
+                        id: order.order_id
+                    };
+
+                    getLocationNameForId(order.location_id).then((name) => {
+                        newOrder.station = name;
+                    });
+
+                    if (order.is_buy_order) {
+                        this.orders.buy.push(newOrder);
+                    } else {
+                        this.orders.sell.push(newOrder);
+                    }
                 });
-
-                if (order.is_buy_order) {
-                    this.orders.buy.push(newOrder);
-                } else {
-                    this.orders.sell.push(newOrder);
-                }
             });
-        });
 
-        ESI.getRegionTypeMarketHistory(10000002, this.typeId).then((data) => {
-            this.priceHistory.push(...data);
-        });
+            ESI.getRegionTypeMarketHistory(10000002, this.typeId).then((data) => {
+                this.priceHistory.push(...data);
+            });
+        }
     },
     components: { Table, MarketHistoryChart }
 }
