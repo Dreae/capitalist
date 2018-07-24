@@ -1,6 +1,7 @@
 <template>
     <div class="container-fluid">
-        <Navbar />
+        <Navbar @showSettings="showSettings" />
+        <SettingsModal :userData="userData" ref="settingsModal" />
         <div class="container-fluid app">
             <div class="tabs is-centered">
                 <ul>
@@ -24,14 +25,27 @@
 import MarketBrowser from "./components/MarketBrowser";
 import SDE from "./static_data";
 import Navbar from './components/Navbar';
+import Userdata from './Userdata';
+import SettingsModal from './components/SettingsModal';
 
 export default {
     name: "App",
-    components: { MarketBrowser, Navbar },
+    components: { MarketBrowser, Navbar, SettingsModal },
     data: function() {
         return {
-            staticData: SDE
+            staticData: SDE,
+            userData: new Userdata(),
+            settingsLoaded: false
         };
+    },
+    beforeMount: async function() {
+        await this.userData.init();
+        this.settingsLoaded = true;
+    },
+    methods: {
+        showSettings: function() {
+            this.$refs.settingsModal.toggle();
+        }
     }
 }
 </script>

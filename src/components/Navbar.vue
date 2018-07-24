@@ -5,6 +5,9 @@
                 <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
             </a>
         </div>
+        <div class="navbar-item">
+            <i class="ion-md-remove" @click="$emit('showSettings')"></i>
+        </div>
         <div class="navbar-end">
             <div class="navbar-item">
                 <i class="ion-md-remove" @click="minimizeApp()"></i>
